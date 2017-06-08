@@ -26,8 +26,11 @@ import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
+import lombok.extern.slf4j.Slf4j;
+
 @SpringBootApplication
 @LineMessageHandler
+@Slf4j
 public class EchoApplication {
     public static void main(String[] args) {
         SpringApplication.run(EchoApplication.class, args);
@@ -35,12 +38,13 @@ public class EchoApplication {
 
     @EventMapping
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
-        System.out.println("event: " + event);
+        log.info("event:{} " + event);
         return new TextMessage(event.getMessage().getText());
     }
 
     @EventMapping
-    public void handleDefaultMessageEvent(Event event) {
-        System.out.println("event: " + event);
+    public TextMessage handleDefaultMessageEvent(Event event) {
+    	  log.info("event:{} " + event);
+    	  return new TextMessage(event.getSource().getSenderId());
     }
 }
